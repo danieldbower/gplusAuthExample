@@ -38,7 +38,7 @@
 					data-scope="email">
 				</span>
 			</span>
-			<g:form action="gplus" method="POST" name="authForm">
+			<g:form action="gplus" method="POST" name="authForm" useToken="true">
 				<g:field type="hidden" name="accessTokenInput"/>
 			</g:form>
 		</div>

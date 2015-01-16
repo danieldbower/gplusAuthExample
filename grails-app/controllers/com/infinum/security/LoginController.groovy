@@ -30,33 +30,40 @@ class LoginController {
 	 * user's profile so that we can verify it is the user
 	 */
 	def gplus(){
-		String accessToken = params.accessTokenInput
-		log.debug "\n\nAuth Access: ${accessToken} \n"
-		
-		if(!accessToken){
-			flash.message = 'Invalid Access Token Received, please try again.'
-			redirect(action:'index')
-			return
-		}
-
-		Map verifyTokenResult = googlePlusAuthService.verifyToken(accessToken)
-		if(verifyTokenResult.success){
-			if(googlePlusAuthService.verifyProfileDomain(verifyTokenResult)){
-				flash.message = "Welcome ${verifyTokenResult.emails}"
-				redirect(uri:"/")
-				return
-			}else{
-				boolean revokeTokenSuccess = googlePlusAuthService.revokeToken(accessToken)
-				render(view:"glogout", model:[
-						domain:verifyTokenResult.domain, 
-						emails: verifyTokenResult.emails, 
-						gplusDomain:grailsApplication.config.gplus.domain,
-						revokeTokenSuccess: revokeTokenSuccess])
+		withForm {
+			String accessToken = params.accessTokenInput
+			log.debug "\n\nAuth Access: ${accessToken} \n"
+			
+			if(!accessToken){
+				flash.message = 'Invalid Access Token Received, please try again.'
+				redirect(action:'index')
 				return
 			}
-		}else{
+	
+			Map verifyTokenResult = googlePlusAuthService.verifyToken(accessToken)
+			if(verifyTokenResult.success){
+				if(googlePlusAuthService.verifyProfileDomain(verifyTokenResult)){
+					flash.message = "Welcome ${verifyTokenResult.emails}"
+					redirect(uri:"/")
+					return
+				}else{
+					boolean revokeTokenSuccess = googlePlusAuthService.revokeToken(accessToken)
+					render(view:"glogout", model:[
+							domain:verifyTokenResult.domain,
+							emails: verifyTokenResult.emails,
+							gplusDomain:grailsApplication.config.gplus.domain,
+							revokeTokenSuccess: revokeTokenSuccess])
+					return
+				}
+			}else{
+				flash.message = 'Login Failed'
+				log.error("Login Failed: ${verifyTokenResult}")
+				redirect(action:'index')
+			}
+	
+		}.invalidToken {
 			flash.message = 'Login Failed'
-			log.error("Login Failed: ${verifyTokenResult}")
+			log.error("Invalid CSRF Token")
 			redirect(action:'index')
 		}
 	}
