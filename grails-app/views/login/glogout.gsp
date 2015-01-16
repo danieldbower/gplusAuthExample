@@ -17,7 +17,7 @@
 	<body>
 		<div id="page-body" role="main">
 			<h1>Wrong Account</h1>
-			<p>You tried to use email address: (${emails.join(',')}) to 
+			<p>You tried to use email address: (${email}) to 
 			login, but you must use your school account from <b>${gplusDomain}</b>.  
 			<p>Please <g:link action="index">try again</g:link> with your school account </p>
 		</div>

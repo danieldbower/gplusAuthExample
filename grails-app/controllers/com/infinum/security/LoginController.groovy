@@ -1,16 +1,17 @@
 package com.infinum.security
 
-import groovy.json.JsonSlurper
-
 import org.codehaus.groovy.grails.commons.GrailsApplication
 
-import com.google.api.client.auth.oauth2.BearerToken
-import com.google.api.client.auth.oauth2.Credential
+import com.google.api.client.auth.oauth2.TokenResponseException
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential
+import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
-import com.google.api.client.http.GenericUrl
-import com.google.api.client.http.HttpRequestFactory
-import com.google.api.client.http.HttpResponse
 import com.google.api.client.http.HttpTransport
+import com.google.api.client.json.JsonFactory
+import com.google.api.client.json.jackson2.JacksonFactory
+import com.google.api.services.oauth2.Oauth2
+import com.google.api.services.oauth2.model.Tokeninfo
 
 class LoginController {
 
@@ -31,26 +32,27 @@ class LoginController {
 	 */
 	def gplus(){
 		withForm {
-			String accessToken = params.accessTokenInput
-			log.debug "\n\nAuth Access: ${accessToken} \n"
+			String code = params.codeInput
+			log.debug "Code: ${code}"
 			
-			if(!accessToken){
-				flash.message = 'Invalid Access Token Received, please try again.'
+			if(!code){
+				flash.message = 'Invalid Code Received, please try again.'
 				redirect(action:'index')
 				return
 			}
-	
-			Map verifyTokenResult = googlePlusAuthService.verifyToken(accessToken)
+			
+			Map verifyTokenResult = googlePlusAuthService.verifyToken(code)
 			if(verifyTokenResult.success){
 				if(googlePlusAuthService.verifyProfileDomain(verifyTokenResult)){
-					flash.message = "Welcome ${verifyTokenResult.emails}"
+					flash.message = "Welcome ${verifyTokenResult.email}"
 					redirect(uri:"/")
 					return
 				}else{
-					boolean revokeTokenSuccess = googlePlusAuthService.revokeToken(accessToken)
+					boolean revokeTokenSuccess = 
+							googlePlusAuthService.revokeToken(verifyTokenResult.accessToken)
 					render(view:"glogout", model:[
 							domain:verifyTokenResult.domain,
-							emails: verifyTokenResult.emails,
+							email: verifyTokenResult.email,
 							gplusDomain:grailsApplication.config.gplus.domain,
 							revokeTokenSuccess: revokeTokenSuccess])
 					return

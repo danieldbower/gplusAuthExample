@@ -18,7 +18,7 @@
 				if (authResult['status']['signed_in']) {
 					document.getElementById('signinButton').setAttribute('style', 'display: none');
 
-					document.getElementById('accessTokenInput').value = authResult['access_token'];
+					document.getElementById('codeInput').value = authResult['code'];
 					document.getElementById("authForm").submit();
 				} else {
 					console.log('SigninCallback returned false signed_in status: ' + authResult['error']);
@@ -29,17 +29,22 @@
 	<body>
 		<div id="page-body" role="main">
 			<h1>Login</h1>
+			<g:if test="${flash.message}">
+				<div class="message" role="status">${flash.message}</div>
+			</g:if>
+			
 			<span id="signinButton">
 				<span
 					class="g-signin"
 					data-callback="signinCallback"
 					data-clientid="${clientId}"
+					data-redirecturi="postmessage"
 					data-cookiepolicy="single_host_origin"
 					data-scope="email">
 				</span>
 			</span>
 			<g:form action="gplus" method="POST" name="authForm" useToken="true">
-				<g:field type="hidden" name="accessTokenInput"/>
+				<g:field type="hidden" name="codeInput"/>
 			</g:form>
 		</div>
 	</body>
