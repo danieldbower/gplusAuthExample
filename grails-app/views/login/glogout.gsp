@@ -20,6 +20,7 @@
 			}
 
 		</style>
+		<script src="https://apis.google.com/js/client:platform.js" async defer></script>
 	</head>
 	<body>
 		<div id="page-body" role="main">
@@ -28,6 +29,8 @@
 			login, but you must use your school account from <b>${gplusDomain}</b>.  
 			You may need to <a href="https://accounts.google.com/AccountChooser?continue=http://google.com" target="_blank">switch accounts.</a></p>
 			<p>After doing so, you should be able to come back and <g:link action="index">sign in</g:link></p>
+			<button onclick="console.log(gapi.auth.checkSessionState());">Auth Object</button>
+			<button onclick="console.log(gapi.auth.signOut());" value="Sign Out">Sign Out</button>
 		</div>
 	</body>
 </html>
