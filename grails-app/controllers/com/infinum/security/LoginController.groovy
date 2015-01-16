@@ -15,17 +15,20 @@ import com.google.api.client.http.HttpTransport
 class LoginController {
 
 	GrailsApplication grailsApplication
-	
-	HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport()
-	
-	JsonSlurper slurper = new JsonSlurper()
-	
-	private final GenericUrl googleMeUrl = new GenericUrl('https://www.googleapis.com/plus/v1/people/me')
+	GooglePlusAuthService googlePlusAuthService
 
+	/**
+	 * Display Login screen containing Google+ login button
+	 */
 	def index(){
 		[clientId:(grailsApplication.config.gplus.clientId)]
 	}
 	
+	/**
+	 * When a user successfully authenticates with Google+, they are redirected 
+	 * here with their Access Token.  We use that token to pull the current 
+	 * user's profile so that we can verify it is the user
+	 */
 	def gplus(){
 		String accessToken = params.accessTokenInput
 		log.debug "\n\nAuth Access: ${accessToken} \n"
@@ -33,37 +36,28 @@ class LoginController {
 		if(!accessToken){
 			flash.message = 'Invalid Access Token Received, please try again.'
 			redirect(action:'index')
+			return
 		}
 
-		Credential credential = new Credential(
-				BearerToken.authorizationHeaderAccessMethod())
-		credential.setAccessToken(accessToken)
-
-		HttpRequestFactory requestFactory = 
-				httpTransport.createRequestFactory(credential)
-
-		HttpResponse gResp = requestFactory.buildGetRequest(googleMeUrl).execute()
-
-		def gProfile = slurper.parse(new BufferedReader(new InputStreamReader(gResp.content)))
-		log.debug(gProfile)
-
-		if(gResp.successStatusCode){
-			if(gProfile.domain == grailsApplication.config.gplus.domain){
-				flash.message = "Welcome ${gProfile.emails[0].value}"
+		Map verifyTokenResult = googlePlusAuthService.verifyToken(accessToken)
+		if(verifyTokenResult.success){
+			if(googlePlusAuthService.verifyProfileDomain(verifyTokenResult)){
+				flash.message = "Welcome ${verifyTokenResult.emails}"
 				redirect(uri:"/")
+				return
 			}else{
-				render(view:"glogout", 
-						model:[
-								domain:gProfile.domain, 
-								emails: gProfile.emails.value, 
-								gplusDomain:grailsApplication.config.gplus.domain,
-								accessToken: accessToken])
+				boolean revokeTokenSuccess = googlePlusAuthService.revokeToken(accessToken)
+				render(view:"glogout", model:[
+						domain:verifyTokenResult.domain, 
+						emails: verifyTokenResult.emails, 
+						gplusDomain:grailsApplication.config.gplus.domain,
+						revokeTokenSuccess: revokeTokenSuccess])
+				return
 			}
 		}else{
 			flash.message = 'Login Failed'
-			log.error("Login Failed: ${gProfile}")
+			log.error("Login Failed: ${verifyTokenResult}")
 			redirect(action:'index')
 		}
 	}
-
 }

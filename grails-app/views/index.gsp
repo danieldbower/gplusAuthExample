@@ -7,18 +7,6 @@
 			#page-body {
 				margin: 1em 1em 1em 1em;
 			}
-
-			h2 {
-				margin-top: 1em;
-				margin-bottom: 0.3em;
-				font-size: 1em;
-			}
-
-			p {
-				line-height: 1.5;
-				margin: 0.25em 0;
-			}
-
 		</style>
 	</head>
 	<body>
@@ -29,8 +17,8 @@
 			</g:if>
 			
 			<ul>
-			<li><g:link controller="login">Login</g:link></li>
-			<li><a href="https://accounts.google.com/logout">Logout</a>
+				<li><g:link controller="login">Login</g:link></li>
+				<li><a href="https://accounts.google.com/logout">Logout of Google</a>
 			</ul>
 		</div>
 	</body>
