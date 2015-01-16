@@ -56,7 +56,8 @@ class LoginController {
 						model:[
 								domain:gProfile.domain, 
 								emails: gProfile.emails.value, 
-								gplusDomain:grailsApplication.config.gplus.domain])
+								gplusDomain:grailsApplication.config.gplus.domain,
+								accessToken: accessToken])
 			}
 		}else{
 			flash.message = 'Login Failed'
