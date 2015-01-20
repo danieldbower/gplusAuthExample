@@ -65,6 +65,7 @@ grails.hibernate.cache.queries = false
 environments {
     development {
         grails.logging.jul.usebridge = true
+        grails.serverURL = "http://localhost:8080/gplusAuthExample"
     }
     production {
         grails.logging.jul.usebridge = false
@@ -96,3 +97,19 @@ log4j = {
            'grails.app.resourceMappers.org.grails.plugin.resource'
 	debug 'grails.app', 'com.infinum'
 }
+
+grails.plugins.springsecurity.rejectIfNoRule = true
+
+grails.plugins.springsecurity.controllerAnnotations.staticRules = [
+	'/':['permitAll'],
+	'/error':['permitAll'],
+	'/securityInfo/**': ["isAuthenticated()"],
+	'/buildInfo/**': ["isAuthenticated()"]
+]
+
+
+// Added by the Spring Security Core plugin:
+grails.plugins.springsecurity.userLookup.userDomainClassName = 'com.infinum.security.User'
+grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'com.infinum.security.UserRole'
+grails.plugins.springsecurity.authority.className = 'com.infinum.security.Role'
+grails.plugins.springsecurity.logout.afterLogoutUrl = '/logout/done'

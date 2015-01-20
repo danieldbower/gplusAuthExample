@@ -110,7 +110,8 @@ class GooglePlusAuthService {
 	 * @return valid
 	 */
 	boolean verifyProfileDomain(Map verifyTokenResult){
-		return verifyTokenResult.domain == grailsApplication.config.gplus.domain
+		List validDomains = grailsApplication.config.gplus.domains
+		return validDomains.contains(verifyTokenResult.domain)
 	}
 	
 	/**

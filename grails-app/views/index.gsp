@@ -17,8 +17,16 @@
 			</g:if>
 			
 			<ul>
-				<li><g:link controller="login">Login</g:link></li>
-				<li><a href="https://accounts.google.com/logout">Logout of Google</a>
+				<sec:ifLoggedIn>
+					<li><g:link controller="logout">Log out <sec:loggedInUserInfo field="username"/></g:link></li>
+				</sec:ifLoggedIn>
+				<sec:ifNotLoggedIn>
+					<li><g:link controller="login">Log in</g:link></li>
+				</sec:ifNotLoggedIn>
+				<li><g:form controller="user" action="create" useToken="true" method="POST">
+					<g:field type="text" name="email" />
+					<g:submitButton name="submit" value="Add User with Email" />
+				</g:form></li>
 			</ul>
 		</div>
 	</body>

@@ -38,15 +38,15 @@ grails.project.dependency.resolution = {
         //mavenRepo "http://download.java.net/maven/2/"
         //mavenRepo "http://repository.jboss.com/maven2/"
     }
-
+	
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
-
+		
 		compile 'com.google.api-client:google-api-client:1.19.1'
 		compile 'com.google.apis:google-api-services-oauth2:v2-rev84-1.19.1'
         // runtime 'mysql:mysql-connector-java:5.1.22'
     }
-
+	
     plugins {
         runtime ":hibernate:$grailsVersion"
         runtime ":jquery:1.8.3"
@@ -62,5 +62,6 @@ grails.project.dependency.resolution = {
         runtime ":database-migration:1.3.8"
 
         compile ':cache:1.0.1'
+		compile ':spring-security-core:1.2.7.3', ":spring-security-appinfo:1.0"
     }
 }
