@@ -96,6 +96,7 @@
 					<span id="signinButton">
 						<span
 							class="g-signin"
+							data-theme='light'
 							data-callback="signinCallback"
 							data-clientid="${clientId}"
 							data-redirecturi="postmessage"

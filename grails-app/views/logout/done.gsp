@@ -13,7 +13,7 @@
 		</g:else>
 	</h2>
 	<p>Log <a href="${grailsApplication.config.grails.serverURL}">back in</a>?</p>
-		
-	<p>Logout of <a href="https://accounts.google.com/logout">Google, too</a>?</p>
+	
+	<p>Logout of <a href="https://accounts.google.com/logout?continue=https://appengine.google.com/_ah/openid_logout?continue=http://localhost:8080/gplusAuthExample">Google, too</a>?</p>
 </body>
 </html>

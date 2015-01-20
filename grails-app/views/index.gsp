@@ -19,6 +19,7 @@
 			<ul>
 				<sec:ifLoggedIn>
 					<li><g:link controller="logout">Log out <sec:loggedInUserInfo field="username"/></g:link></li>
+					<li><g:link controller="login" action="auth" params="[switchAccounts:'true']">Switch Accounts</g:link></li>
 				</sec:ifLoggedIn>
 				<sec:ifNotLoggedIn>
 					<li><g:link controller="login">Log in</g:link></li>
