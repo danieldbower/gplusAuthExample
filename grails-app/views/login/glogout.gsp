@@ -19,7 +19,7 @@
 			<h1>Wrong Account</h1>
 			<p>You tried to use email address: (${email}) to 
 			login, but you must use your school account from <b>${org}</b>.  
-			<p>Please <g:link action="auth">try again</g:link> with your school account </p>
+			<p>Please <g:link action="auth" params="[switchAccounts:'true']">try again</g:link> with your school account </p>
 		</div>
 	</body>
 </html>

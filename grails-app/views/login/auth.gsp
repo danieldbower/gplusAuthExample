@@ -99,6 +99,7 @@
 							data-callback="signinCallback"
 							data-clientid="${clientId}"
 							data-redirecturi="postmessage"
+							data-approvalprompt="${approvalPrompt}"
 							data-cookiepolicy="single_host_origin"
 							data-scope="email">
 						</span>

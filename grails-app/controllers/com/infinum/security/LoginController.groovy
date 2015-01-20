@@ -44,7 +44,8 @@ class LoginController {
 			return
 		}
 		
-		[clientId:(grailsApplication.config.gplus.clientId)]
+		[clientId:(grailsApplication.config.gplus.clientId), 
+				approvalPrompt:(params.switchAccounts)?'force':'auto']
 	}
 	
 	/**
