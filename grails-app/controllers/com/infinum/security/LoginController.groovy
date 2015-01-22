@@ -150,6 +150,7 @@ class LoginController {
 		}
 
 		flash.message = "Access denied"
+		log.warn "Access Denied.  Redirecting to home page."
 		redirect('uri':'/')
 	}
 

@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta name="layout" content="main"/>
-		<title>Login</title>
+		<title>${grailsApplication.metadata['app.name']} <g:message code="springSecurity.login.title" /></title>
 		<style type="text/css" media="screen">
 			#login {
 				margin: 15px 0px;
@@ -92,6 +92,9 @@
 				<g:if test="${flash.message}">
 					<div class="login_message">${flash.message}</div>
 				</g:if>
+				<g:else>
+					Welcome to ${grailsApplication.metadata['app.name']}.  <span>Please Log in.</span>
+				</g:else>
 				
 					<span id="signinButton">
 						<span

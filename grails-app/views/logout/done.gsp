@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta name='layout' content='main' />
-	<title>Logout</title>
+	<title>${grailsApplication.metadata['app.name']}<g:message code="springSecurity.login.title" /></title>
 </head>
 <body>
 	<h2>
@@ -14,6 +14,8 @@
 	</h2>
 	<p>Log <a href="${grailsApplication.config.grails.serverURL}">back in</a>?</p>
 	
-	<p>Logout of <a href="https://accounts.google.com/logout?continue=https://appengine.google.com/_ah/openid_logout?continue=http://localhost:8080/gplusAuthExample">Google, too</a>?</p>
+	<g:if test="${grailsApplication.config.gplus.active}">
+		<p>Logout of <a href="${gPlusLogoutUrl}">Google, too</a>?</p>
+	</g:if>
 </body>
 </html>
